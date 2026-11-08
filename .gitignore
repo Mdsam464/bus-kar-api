@@ -1,0 +1,23 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables (keep secrets private)
+.env
+
+# SQLite local database
+*.db
+transit.db
+
+# Logs
+*.log
+
+# IDE specific
+.vscode/
+.idea/
