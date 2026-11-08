@@ -11,6 +11,7 @@ from app.services.tag_service import normalize_text
 from app.routers.transit import router as transit_router
 from app.routers.tags import router as tags_router
 from app.routers.whatsapp import router as whatsapp_router
+from app.mcp_server import mcp
 
 async def seed_initial_data():
     """Populates initial Delhi GTFS stops, routes, and community tags if empty."""
@@ -85,6 +86,9 @@ app.add_middleware(
 app.include_router(transit_router)
 app.include_router(tags_router)
 app.include_router(whatsapp_router)
+
+# Mount MCP Server over SSE for OpenAI and remote AI agent integrations
+app.mount("/mcp", mcp.sse_app())
 
 @app.get("/")
 async def root():
