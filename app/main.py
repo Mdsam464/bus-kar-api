@@ -93,8 +93,15 @@ app.include_router(transit_router)
 app.include_router(tags_router)
 app.include_router(whatsapp_router)
 
-# Mount MCP Server over SSE for OpenAI and remote AI agent integrations
-app.mount("/mcp", mcp.sse_app())
+# Mount MCP Server over SSE for Claude, OpenAI, and remote AI agent integrations
+try:
+    from mcp.server.transport_security import TransportSecuritySettings
+    mcp_security = TransportSecuritySettings(enable_dns_rebinding_protection=False)
+    mcp_app = mcp.sse_app(transport_security=mcp_security, host="0.0.0.0")
+except Exception:
+    mcp_app = mcp.sse_app(host="0.0.0.0")
+
+app.mount("/mcp", mcp_app)
 
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
