@@ -1,0 +1,49 @@
+{
+  "name": "bus-kar",
+  "displayName": "Bus Kar! Indian City Transit",
+  "version": "1.0.0",
+  "description": "Real-time Indian city bus telemetry (DTC/DIMTS Delhi, BMTC Bengaluru, BEST Mumbai), live GPS ETAs, crowd occupancy, route planning, Pink Ticket fare calculator, and colloquial station tag resolution.",
+  "author": {
+    "name": "Bus Kar! Team"
+  },
+  "homepage": "https://github.com/Mdsam464/bus-kar-api",
+  "icon": "icon.png",
+  "categories": ["Travel & Navigation", "Productivity", "Utilities"],
+  "mcpServers": {
+    "bus-kar": {
+      "type": "sse",
+      "url": "http://127.0.0.1:8000/mcp/sse",
+      "description": "Bus Kar! Live Transit & Telemetry Engine"
+    }
+  },
+  "tools": [
+    {
+      "name": "resolve_stop",
+      "description": "Resolves colloquial Indian bus stop nicknames or landmarks (e.g. Purana Adda, Silk Board, AIIMS gate 2) into official GTFS stop IDs."
+    },
+    {
+      "name": "get_live_bus_eta",
+      "description": "Retrieves real-time bus arrivals and live GPS telemetry at a stop, including countdown, crowd occupancy, and live map link."
+    },
+    {
+      "name": "plan_transit_trip",
+      "description": "Plans a point-to-point transit journey calculating routes, travel time, fare estimate, and first/last-mile ride suggestions."
+    },
+    {
+      "name": "get_fare_and_ticketing_info",
+      "description": "Calculates official bus fares, checks concession eligibility (e.g. Delhi Pink Pass 100% free for women), and returns ticketing links."
+    },
+    {
+      "name": "suggest_colloquial_tag",
+      "description": "Registers a new public colloquial nickname for a bus stop."
+    },
+    {
+      "name": "vote_stop_tag",
+      "description": "Upvotes or downvotes an existing crowdsourced colloquial stop tag."
+    },
+    {
+      "name": "list_stop_tags",
+      "description": "Lists all active public colloquial aliases for a stop."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "manifest_version": "1.0",
+  "name": "bus-kar",
+  "display_name": "Bus Kar!",
+  "version": "1.0.0",
+  "description": "Agent-first real-time Indian city bus tracking and crowdsourced colloquial transit navigation.",
+  "publisher": "Bus Kar! Team",
+  "icons": {
+    "128": "icon.png"
+  },
+  "mcp_server": {
+    "type": "sse",
+    "url": "http://127.0.0.1:8000/mcp/sse"
+  }
+}
