@@ -9,7 +9,7 @@ Copy and paste these verified values when creating your Custom GPT in [chatgpt.c
 - **Description:** `Real-time Delhi & metro bus tracker, live ETAs, fare calculator, and crowdsourced stop guide.`
 - **Publisher Name:** `Bus Kar! Team` (or `Touchstone Labs`)
 - **Website URL:** `https://bus-kar-api.vercel.app`
-- **Support URL:** `https://bus-kar-api.vercel.app/support` (or `mailto:support@antigravity.in`)
+- **Support URL:** `https://bus-kar-api.vercel.app/support` (or `mailto:contactus@touchstonelabs.ai`)
 - **Privacy Policy URL:** `https://bus-kar-api.vercel.app/privacy`
 - **Terms of Service URL:** `https://bus-kar-api.vercel.app/terms`
 

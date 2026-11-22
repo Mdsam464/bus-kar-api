@@ -134,7 +134,7 @@ async def ai_plugin_json():
             "url": "https://bus-kar-api.vercel.app/openapi.json"
         },
         "logo_url": "https://bus-kar-api.vercel.app/static/icon.png",
-        "contact_email": "support@antigravity.in",
+        "contact_email": "contactus@touchstonelabs.ai",
         "legal_info_url": "https://bus-kar-api.vercel.app/privacy"
     }
 
@@ -369,7 +369,7 @@ ABOUT_HTML = f"""<!DOCTYPE html>
             </div>
             <div>
               <dt class="text-slate-500 mb-1">Official Support & Developer Contact</dt>
-              <dd class="font-bold text-slate-200 text-sm"><a href="mailto:support@antigravity.in" class="text-emerald-400 hover:underline">support@antigravity.in</a></dd>
+              <dd class="font-bold text-slate-200 text-sm"><a href="mailto:contactus@touchstonelabs.ai" class="text-emerald-400 hover:underline">contactus@touchstonelabs.ai</a></dd>
             </div>
             <div>
               <dt class="text-slate-500 mb-1">Open Source Repository</dt>
@@ -466,7 +466,7 @@ TERMS_HTML = f"""<!DOCTYPE html>
 
         <section>
           <h2 class="text-lg font-semibold text-white mb-2">7. Publisher Information & Governing Entity</h2>
-          <p>Bus Kar! is maintained by the <strong>Bus Kar! Team</strong> under organization <strong>Touchstone Labs</strong>, lead maintainer <strong>Mdsam464</strong>. Questions regarding these Terms may be directed to <a href="mailto:support@antigravity.in" class="text-emerald-400 underline">support@antigravity.in</a>.</p>
+          <p>Bus Kar! is maintained by the <strong>Bus Kar! Team</strong> under organization <strong>Touchstone Labs</strong>, lead maintainer <strong>Mdsam464</strong>. Questions regarding these Terms may be directed to <a href="mailto:contactus@touchstonelabs.ai" class="text-emerald-400 underline">contactus@touchstonelabs.ai</a>.</p>
         </section>
       </div>
     </div>
@@ -506,7 +506,7 @@ SUPPORT_HTML = f"""<!DOCTYPE html>
           <div class="text-2xl mb-2">✉️</div>
           <h2 class="font-bold text-white mb-1">Direct Support Email</h2>
           <p class="text-xs text-slate-400 mb-3">For publisher inquiries, bug reports, or partnership questions.</p>
-          <a href="mailto:support@antigravity.in" class="text-emerald-400 font-semibold hover:underline">support@antigravity.in</a>
+          <a href="mailto:contactus@touchstonelabs.ai" class="text-emerald-400 font-semibold hover:underline">contactus@touchstonelabs.ai</a>
         </div>
 
         <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-6">
@@ -595,7 +595,7 @@ PRIVACY_HTML = f"""<!DOCTYPE html>
 
         <section>
           <h2 class="text-lg font-semibold text-white mb-2">6. Contact & Open Source</h2>
-          <p>For questions or privacy inquiries, contact the Bus Kar! project maintainers via email at <a href="mailto:support@antigravity.in" class="text-emerald-400 underline">support@antigravity.in</a> or visit our open-source repository at <a href="https://github.com/Mdsam464/bus-kar-api" class="text-emerald-400 underline" target="_blank">github.com/Mdsam464/bus-kar-api</a>.</p>
+          <p>For questions or privacy inquiries, contact the Bus Kar! project maintainers via email at <a href="mailto:contactus@touchstonelabs.ai" class="text-emerald-400 underline">contactus@touchstonelabs.ai</a> or visit our open-source repository at <a href="https://github.com/Mdsam464/bus-kar-api" class="text-emerald-400 underline" target="_blank">github.com/Mdsam464/bus-kar-api</a>.</p>
         </section>
       </div>
     </div>
