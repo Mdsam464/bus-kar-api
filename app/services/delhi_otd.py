@@ -266,7 +266,7 @@ class DelhiOTDService:
                         "distance_meters": int(dist_m),
                         "last_ping_seconds_ago": ping_age,
                         "occupancy_status": "MANY_SEATS_AVAILABLE",
-                        "live_map_url": f"https://delhi-bus-live.antigravity.in/track?vehicle={veh.vehicle_id}&stop={stop_id}"
+                        "live_map_url": f"https://bus-kar-api.vercel.app/track?vehicle={veh.vehicle_id}&stop={stop_id}"
                     })
 
             if nearby_arrivals:
@@ -308,7 +308,7 @@ class DelhiOTDService:
                 "distance_meters": dist,
                 "last_ping_seconds_ago": ping_age,
                 "occupancy_status": occupancy,
-                "live_map_url": f"https://delhi-bus-live.antigravity.in/track?vehicle={veh_num}&stop={stop_id}"
+                "live_map_url": f"https://bus-kar-api.vercel.app/track?vehicle={veh_num}&stop={stop_id}"
             })
 
         arrivals.sort(key=lambda x: x["eta_minutes"])

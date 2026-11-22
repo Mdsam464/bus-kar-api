@@ -661,6 +661,146 @@ async def terms():
 async def support():
     return HTMLResponse(content=SUPPORT_HTML)
 
+@app.get("/track", response_class=HTMLResponse, include_in_schema=False)
+async def live_bus_track(request: Request):
+    vehicle = request.query_params.get("vehicle", "DL-1PC-4921")
+    stop = request.query_params.get("stop", "DTC_KG_01")
+    
+    track_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Bus Telemetry: {vehicle} - Bus Kar! 🚌</title>
+  <link rel="icon" type="image/png" href="/static/favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {{ font-family: 'Plus Jakarta Sans', sans-serif; }}
+    #map {{ height: 500px; width: 100%; border-radius: 1.25rem; }}
+    .leaflet-tile {{ filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7); }}
+    .leaflet-container {{ background: #020617; }}
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+  {NAVBAR_HTML}
+
+  <main class="max-w-6xl mx-auto px-6 py-8 flex-1 w-full">
+    <!-- Telemetry Header -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 mb-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+            LIVE GPS TELEMETRY
+          </span>
+          <span class="text-xs text-slate-500">• Delhi Open Transit Data (OTD)</span>
+        </div>
+        <h1 class="text-2xl font-extrabold text-white flex items-center gap-3">
+          <span>🚌 Vehicle <span class="text-emerald-400">{vehicle}</span></span>
+          <span class="text-xs font-normal px-2.5 py-1 bg-slate-800 border border-slate-700 rounded-lg text-slate-300">Approaching {stop}</span>
+        </h1>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 text-xs">
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5">
+          <span class="text-slate-500 block">ETA Countdown</span>
+          <span class="text-base font-bold text-emerald-400" id="countdown">4 mins (1,250 m)</span>
+        </div>
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5">
+          <span class="text-slate-500 block">Current Speed</span>
+          <span class="text-base font-bold text-teal-300">26 km/h</span>
+        </div>
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5">
+          <span class="text-slate-500 block">Occupancy</span>
+          <span class="text-base font-bold text-cyan-300">Seats Available</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Map Container -->
+    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 shadow-2xl relative mb-6">
+      <div id="map"></div>
+      <div class="absolute bottom-6 left-6 z-[1000] bg-slate-950/90 backdrop-blur border border-slate-800 rounded-xl p-3 text-xs shadow-lg max-w-xs">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>
+          <span class="font-bold text-slate-200">Bus: {vehicle}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+          <span class="font-bold text-slate-200">Stop: {stop}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Info Bar -->
+    <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <div>
+        <span>Ticketing Concession: </span>
+        <span class="text-pink-400 font-semibold">Delhi Pink Scheme 100% Free for Women Commuters (Conductor on-board)</span>
+      </div>
+      <div>
+        <a href="https://wa.me/918744073223?text=Hi" target="_blank" class="text-emerald-400 hover:underline">
+          Book QR Ticket on Official DTC WhatsApp (+91 8744073223) →
+        </a>
+      </div>
+    </div>
+  </main>
+
+  {FOOTER_HTML}
+
+  <script>
+    // Delhi Map Coordinates
+    const stopLat = 28.6668;
+    const stopLon = 77.2307;
+    const busLat = 28.6580;
+    const busLon = 77.2385;
+
+    const map = L.map('map').setView([28.6624, 77.2346], 14);
+
+    L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }}).addTo(map);
+
+    // Stop Marker
+    const stopMarker = L.circleMarker([stopLat, stopLon], {{
+      radius: 9,
+      fillColor: '#10b981',
+      color: '#ffffff',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.9
+    }}).addTo(map);
+    stopMarker.bindPopup('<b>Stop: {stop}</b><br>Next Arrival in ~4 mins').openPopup();
+
+    // Bus Marker
+    const busMarker = L.circleMarker([busLat, busLon], {{
+      radius: 11,
+      fillColor: '#3b82f6',
+      color: '#ffffff',
+      weight: 3,
+      opacity: 1,
+      fillOpacity: 1.0
+    }}).addTo(map);
+    busMarker.bindPopup('<b>Bus: {vehicle}</b><br>Speed: 26 km/h<br>Status: In-Transit');
+
+    // Route Polyline
+    const latlngs = [
+      [busLat, busLon],
+      [28.6610, 77.2355],
+      [28.6640, 77.2325],
+      [stopLat, stopLon]
+    ];
+    L.polyline(latlngs, {{ color: '#38bdf8', weight: 4, opacity: 0.8, dashArray: '8, 8' }}).addTo(map);
+  </script>
+</body>
+</html>
+"""
+    return HTMLResponse(content=track_html)
+
 @app.get("/health")
 async def health():
     return {"status": "healthy"}

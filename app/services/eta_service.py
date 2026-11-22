@@ -110,8 +110,10 @@ class ETAService:
             bus_type=bus_type,
             concessions_applicable=concessions,
             digital_ticketing={
-                "provider": "Chartr / One Delhi",
+                "provider": "DTC Official / Chartr / One Delhi",
                 "method": "WhatsApp_Ticketing",
-                "booking_link": f"https://wa.me/919999999999?text=Ticket+{route_number}+{from_stop}"
+                "booking_link": f"https://wa.me/918744073223?text=Hi%20Book%20Ticket%20Route%20{route_number}%20from%20{from_stop}",
+                "app_url": "https://chartr.in",
+                "helpline": "+91 8744073223"
             }
         )

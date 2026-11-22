@@ -249,7 +249,7 @@ Provides official fare slabs, concession eligibility (e.g., Delhi Pink Pass for 
     "digital_ticketing": {
       "provider": "Chartr",
       "method": "WhatsApp_or_QR",
-      "booking_link": "https://wa.me/919999999999?text=Ticket+534+NehruPlace"
+      "booking_link": "https://wa.me/918744073223?text=Hi%20Book%20Ticket%20534%20NehruPlace"
     }
   }
   ```
