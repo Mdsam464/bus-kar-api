@@ -1,13 +1,11 @@
 {
   "mcpServers": {
-    "bus-kar-local": {
+    "bus-kar": {
       "command": "C:/Python314/python.exe",
       "args": [
+        "-u",
         "C:/Users/salma/.gemini/antigravity/scratch/transit-agent-api/run_mcp.py"
       ]
-    },
-    "bus-kar-remote": {
-      "url": "https://bus-kar.onrender.com/mcp/sse"
     }
   }
 }
