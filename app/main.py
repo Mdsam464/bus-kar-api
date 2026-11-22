@@ -96,8 +96,113 @@ app.include_router(whatsapp_router)
 # Mount MCP Server over SSE for OpenAI and remote AI agent integrations
 app.mount("/mcp", mcp.sse_app())
 
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import Request
+
+LANDING_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bus Kar! 🚌 - Transit AI Agent API & MCP Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+  <!-- Navbar -->
+  <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur px-6 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🚌</span>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Bus Kar!</h1>
+          <p class="text-xs text-slate-400">Indian City Transit Telemetry & Agent MCP</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          System Online
+        </span>
+        <a href="/docs" class="px-4 py-1.5 rounded-lg text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-lg shadow-emerald-900/30">
+          API Docs →
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main class="max-w-6xl mx-auto px-6 py-12 flex-1 flex flex-col justify-center">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+        Real-Time Indian Bus Telemetry for <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">AI Agents & Humans</span>
+      </h2>
+      <p class="text-slate-400 text-lg leading-relaxed">
+        Agent-first Model Context Protocol (MCP) server & REST API powering Delhi DTC/DIMTS live tracking, crowdsourced colloquial stop tags, and 100% free Pink Ticket concessions.
+      </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition">
+        <div class="text-2xl mb-3">📍</div>
+        <h3 class="font-bold text-lg mb-2 text-slate-200">Colloquial Stop Tags</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Resolves local landmarks like <em>"Purana Adda"</em>, <em>"AIIMS Gate 2"</em>, or <em>"Silk Board"</em> directly into official GTFS stop identifiers.
+        </p>
+      </div>
+
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition">
+        <div class="text-2xl mb-3">⚡</div>
+        <h3 class="font-bold text-lg mb-2 text-slate-200">Live GPS Countdown & ETAs</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Real-time vehicle locations, distance countdowns, and live crowd occupancy (Seats Available, Standing Room Only).
+        </p>
+      </div>
+
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition">
+        <div class="text-2xl mb-3">🎟️</div>
+        <h3 class="font-bold text-lg mb-2 text-slate-200">Pink Ticket Fare Calculator</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Official DTC fare slabs with automatic zero-rupee Delhi Pink Scheme calculations for female passengers.
+        </p>
+      </div>
+    </div>
+
+    <!-- Quick Links & Actions -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h4 class="font-bold text-slate-200">Connect to Claude, ChatGPT & Gemini</h4>
+        <p class="text-xs text-slate-400">Import OpenAPI schema or connect MCP stream directly into any AI assistant.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="/docs" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm font-medium transition">
+          Interactive Swagger (/docs)
+        </a>
+        <a href="/openapi.json" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm font-medium transition">
+          OpenAPI Specification (/openapi.json)
+        </a>
+        <a href="/api/v1/transit/stops/resolve?query=Purana+Adda&city=delhi" target="_blank" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-sm font-semibold transition">
+          Test Sample Query →
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 px-6 py-6 text-center text-xs text-slate-500">
+    Bus Kar! Transit Engine • Open Source Transit Intelligence for Indian Cities • Deployed on Vercel
+  </footer>
+</body>
+</html>
+"""
+
 @app.get("/")
-async def root():
+async def root(request: Request):
+    accept_header = request.headers.get("accept", "")
+    if "text/html" in accept_header:
+        return HTMLResponse(content=LANDING_HTML)
     return {
         "service": settings.app_name,
         "status": "online",
