@@ -116,6 +116,26 @@ async def favicon_ico():
 async def favicon_png():
     return FileResponse(os.path.join(STATIC_DIR, "favicon.png"), media_type="image/png")
 
+@app.get("/.well-known/ai-plugin.json", include_in_schema=False)
+async def ai_plugin_json():
+    return {
+        "schema_version": "v1",
+        "name_for_human": "Bus Kar! 🚌",
+        "name_for_model": "bus_kar",
+        "description_for_human": "Real-time Indian city bus tracking, live GPS arrivals, colloquial stop nicknames (e.g. Purana Adda), and DTC Pink Pass free travel calculation.",
+        "description_for_model": "Agent-first transit navigation and live bus telemetry engine for Indian city buses (Delhi DTC/DIMTS, expanding to BMTC Bengaluru and BEST Mumbai). Always resolve colloquial stop nicknames using resolveStop. Check real-time arrivals using getStopEta. Plan multi-modal trips using planTrip. Calculate official DTC fares and apply the 100% free Pink Ticket scheme for female passengers.",
+        "auth": {
+            "type": "none"
+        },
+        "api": {
+            "type": "openapi",
+            "url": "https://bus-kar-api.vercel.app/openapi.json"
+        },
+        "logo_url": "https://bus-kar-api.vercel.app/static/icon.png",
+        "contact_email": "support@antigravity.in",
+        "legal_info_url": "https://bus-kar-api.vercel.app/"
+    }
+
 LANDING_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>

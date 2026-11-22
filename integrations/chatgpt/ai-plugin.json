@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Bus Kar! 🚌",
+  "name_for_model": "bus_kar",
+  "description_for_human": "Real-time Indian city bus tracking, live GPS arrivals, colloquial stop nicknames (e.g. Purana Adda), and DTC Pink Pass free travel calculation.",
+  "description_for_model": "Agent-first transit navigation and live bus telemetry engine for Indian city buses (Delhi DTC/DIMTS, expanding to BMTC Bengaluru and BEST Mumbai). Always resolve colloquial stop nicknames using resolveStop. Check real-time arrivals using getStopEta. Plan multi-modal trips using planTrip. Calculate official DTC fares and apply the 100% free Pink Ticket scheme for female passengers.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://bus-kar-api.vercel.app/openapi.json"
+  },
+  "logo_url": "https://bus-kar-api.vercel.app/static/icon.png",
+  "contact_email": "support@antigravity.in",
+  "legal_info_url": "https://bus-kar-api.vercel.app/"
+}
