@@ -1,0 +1,6 @@
+# Override global LFS for web assets so Vercel can serve real image binaries
+*.png -filter -diff -merge binary
+*.jpg -filter -diff -merge binary
+*.jpeg -filter -diff -merge binary
+*.ico -filter -diff -merge binary
+*.zip -filter -diff -merge binary
