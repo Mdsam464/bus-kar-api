@@ -1,13 +1,22 @@
+import os
+import tempfile
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+def get_default_database_url() -> str:
+    # On Vercel, AWS Lambda, or containerized serverless, root directory is read-only
+    # The only writable directory is /tmp
+    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        return "sqlite+aiosqlite:////tmp/transit.db"
+    return "sqlite+aiosqlite:///./transit.db"
 
 class Settings(BaseSettings):
     app_name: str = "Bus Kar! - Transit AI Agent API & MCP Plugin"
     environment: str = "development"
-    debug: bool = True
+    debug: bool = False
     port: int = 8000
     host: str = "0.0.0.0"
 
-    database_url: str = "sqlite+aiosqlite:///./transit.db"
+    database_url: str = get_default_database_url()
     
     # Delhi OTD
     delhi_otd_api_key: str = "mock_key"

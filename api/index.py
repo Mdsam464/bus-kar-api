@@ -1,6 +1,8 @@
 import sys
 import os
 
+os.environ.setdefault("VERCEL", "1")
+
 # Add parent directory to sys.path so app module is importable by Vercel serverless
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if parent_dir not in sys.path:

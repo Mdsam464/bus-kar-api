@@ -21,3 +21,5 @@ transit.db
 # IDE specific
 .vscode/
 .idea/
+
+.vercel

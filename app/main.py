@@ -61,12 +61,18 @@ async def seed_initial_data():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: create DB tables and seed
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    await seed_initial_data()
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        await seed_initial_data()
+    except Exception as e:
+        print(f"Database initialization warning in lifespan: {e}")
     yield
     # Shutdown
-    await engine.dispose()
+    try:
+        await engine.dispose()
+    except Exception:
+        pass
 
 app = FastAPI(
     title="Bus Kar! 🚌",
