@@ -1,8 +1,9 @@
 import json
 import sys
+import os
 import httpx
 
-API_BASE = "http://127.0.0.1:8000"
+API_BASE = os.environ.get("BUS_KAR_API_URL", "https://bus-kar-api.vercel.app")
 
 TOOLS = [
     {

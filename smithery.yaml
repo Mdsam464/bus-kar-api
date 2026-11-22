@@ -1,0 +1,10 @@
+# Smithery configuration for Bus Kar!
+# https://smithery.ai/docs/config#smitheryyaml
+startCommand:
+  type: stdio
+  config:
+    command: python
+    args:
+      - run_mcp.py
+    env:
+      BUS_KAR_API_URL: https://bus-kar-api.vercel.app

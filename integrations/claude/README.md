@@ -1,61 +1,69 @@
-# Anthropic Claude Integration Guide for Bus Kar! 🚌
+# Anthropic Claude Integration & Distribution Guide for Bus Kar! 🚌
 
-Bus Kar! provides native support for Anthropic Claude via the **Model Context Protocol (MCP)**.
+Bus Kar! provides native support for Anthropic Claude via the **Model Context Protocol (MCP)** and **Claude Desktop Plugins**.
+
+Production API Endpoint: `https://bus-kar-api.vercel.app`
 
 ---
 
-## 🖥️ Option 1: Claude Desktop App (Windows)
+## 🌍 How to Share Bus Kar with Other Claude Users
 
-Depending on how you installed Claude Desktop on Windows:
+### Method 1: Claude Desktop Plugin (.zip Upload) — Recommended for Teams
+You can share the pre-packaged plugin zip:
+👉 [`integrations/claude-plugin/bus-kar-claude-plugin.zip`](../claude-plugin/bus-kar-claude-plugin.zip)
 
-### For Microsoft Store Version (Packaged):
-Copy the configuration into:  
-`C:\Users\salma\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\claude_desktop_config.json`
+1. Open **Claude Desktop** (or Claude for Work / Team).
+2. Go to **Settings → Extensions / Plugins → Upload Plugin**.
+3. Select `bus-kar-claude-plugin.zip`.
+4. Claude will immediately register all 7 Bus Kar transit tools!
 
-### For Standard Installer:
-Copy the configuration into:  
-`%APPDATA%\Claude\claude_desktop_config.json`
+*For Claude Team/Enterprise admins: Upload to your **Organization Catalog** to automatically enable it for every team member in your company.*
 
-### Config Content:
+---
+
+### Method 2: 1-Click Install via Smithery.ai
+This repository is pre-configured with `smithery.yaml`.
+Once published on [Smithery.ai](https://smithery.ai):
+- **Claude Desktop:** Users can install with a single click.
+- **Claude Code CLI:** Users can install with one command:
+  ```bash
+  npx -y @smithery/cli install bus-kar --client claude
+  ```
+
+---
+
+### Method 3: Direct Claude Desktop Config (Any Computer)
+Other users can clone or download `run_mcp.py` and point their Claude Desktop config to:
 ```json
 {
   "mcpServers": {
     "bus-kar": {
-      "command": "C:/Python314/python.exe",
-      "args": [
-        "C:/Users/salma/.gemini/antigravity/scratch/transit-agent-api/run_mcp.py"
-      ]
+      "command": "python",
+      "args": ["-u", "run_mcp.py"],
+      "env": {
+        "BUS_KAR_API_URL": "https://bus-kar-api.vercel.app"
+      }
     }
   }
 }
 ```
-*(Or use the remote SSE endpoint: `"url": "https://bus-kar.onrender.com/mcp/sse"`)*
-
-1. Completely quit Claude Desktop (close from system tray).
-2. Reopen Claude Desktop.
-3. The Hammer icon (🔨) in the chat window will show 7 active Bus Kar tools!
+*Note: Because `run_mcp.py` connects to `https://bus-kar-api.vercel.app`, users do not need to run a local backend or database on their computer.*
 
 ---
 
-## 💻 Option 2: Claude Code (CLI)
-
-In PowerShell, inside the project folder:
-```powershell
-claude.cmd mcp add bus-kar -- C:\Python314\python.exe C:\Users\salma\.gemini\antigravity\scratch\transit-agent-api\run_mcp.py
-```
-
-Or copy [`claude_code_config.json`](claude_code_config.json) to `.mcp.json` in your project root, then launch:
-```powershell
-claude.cmd
+### Method 4: Claude Code CLI
+```bash
+claude mcp add bus-kar -- python -u run_mcp.py
 ```
 
 ---
 
-## 🛠️ Exposed MCP Tools in Claude:
-1. `resolve_stop(query, city, limit)`
-2. `get_live_bus_eta(stop_id, city, route_number)`
-3. `plan_transit_trip(origin, destination, city, preference)`
-4. `get_fare_and_ticketing_info(from_stop, to_stop, route_number, city, passenger_category)`
-5. `suggest_colloquial_tag(stop_id, tag, city, language, category)`
-6. `vote_stop_tag(tag_id, vote_type)`
-7. `list_stop_tags(stop_id, city)`
+## 🛠️ Available Transit Tools in Claude
+
+1. `resolve_stop`: Resolves colloquial Indian bus stop nicknames or landmarks (e.g. *Purana Adda*, *Silk Board*, *AIIMS gate 2*) into official GTFS stop IDs.
+2. `get_live_bus_eta`: Real-time bus arrivals and live GPS telemetry, including countdown, crowd occupancy, and live map link.
+3. `plan_transit_trip`: Point-to-point transit journey calculation, travel time, and first/last-mile ride suggestions.
+4. `get_fare_and_ticketing_info`: DTC official fares & 100% free Pink Ticket concessions for women.
+5. `suggest_colloquial_tag`: Registers a new public colloquial nickname for a bus stop.
+6. `vote_stop_tag`: Upvotes or downvotes an existing crowdsourced colloquial stop tag.
+7. `list_stop_tags`: Lists all active public colloquial aliases for a stop.
