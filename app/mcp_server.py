@@ -103,10 +103,10 @@ async def plan_transit_trip(
 
 @mcp.tool(
     name="get_fare_and_ticketing_info",
-    title="Bus Fare Calculator & Digital Ticketing",
-    description="Calculates official bus fares, verifies Pink Scheme free pass eligibility for female commuters, and provides verified WhatsApp/QR ticketing links.",
+    title="Bus Fare Calculator & Concessions",
+    description="Calculates official bus fares, verifies Pink Scheme free pass eligibility for female commuters, and provides on-board ticketing guidance without commercial checkout links.",
     annotations=ToolAnnotations(
-        title="Bus Fare Calculator & Digital Ticketing",
+        title="Bus Fare Calculator & Concessions",
         read_only_hint=True,
         destructive_hint=False,
         idempotent_hint=True,
@@ -122,7 +122,7 @@ async def get_fare_and_ticketing_info(
 ) -> str:
     """
     Calculates official bus fares, checks concession eligibility (e.g., Delhi Pink Ticket free for women),
-    and gives deep links for digital WhatsApp/QR ticketing.
+    and explains on-board conductor and smart card ticketing methods.
     passenger_category can be: 'general', 'woman', 'senior_citizen', 'student'.
     """
     res = ETAService.get_fare_details(city, route_number, from_stop, to_stop, passenger_category)

@@ -110,10 +110,8 @@ class ETAService:
             bus_type=bus_type,
             concessions_applicable=concessions,
             digital_ticketing={
-                "provider": "DTC Official / Chartr / One Delhi",
-                "method": "WhatsApp_Ticketing",
-                "booking_link": f"https://wa.me/918744073223?text=Hi%20Book%20Ticket%20Route%20{route_number}%20from%20{from_stop}",
-                "app_url": "https://chartr.in",
-                "helpline": "+91 8744073223"
+                "ticketing_type": "On-Board Conductor & Public Metro Card",
+                "payment_modes": ["Cash", "DTC Smart Card", "National Common Mobility Card (NCMC)"],
+                "pink_pass_info": "Free physical Pink Slip issued on-board by bus conductor for female commuters. No advance online purchase required."
             }
         )
