@@ -1,0 +1,115 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Bus Kar! Gemini Extension",
+    "description": "Google Gemini Extension for Indian city bus tracking, live GPS arrivals, route planning, fare calculation, and crowdsourced stop tags.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://bus-kar.onrender.com",
+      "description": "Bus Kar Production Server"
+    }
+  ],
+  "paths": {
+    "/api/v1/transit/stops/resolve": {
+      "get": {
+        "operationId": "resolve_stop",
+        "summary": "Resolve colloquial station name",
+        "description": "Translates informal stop names or landmarks into official GTFS stop IDs.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "delhi" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Candidate stops" }
+        }
+      }
+    },
+    "/api/v1/transit/stops/{stop_id}/eta": {
+      "get": {
+        "operationId": "get_live_bus_eta",
+        "summary": "Get live bus ETA and GPS location",
+        "parameters": [
+          {
+            "name": "stop_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "route_number",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Live bus arrivals" }
+        }
+      }
+    },
+    "/api/v1/transit/trip/plan": {
+      "get": {
+        "operationId": "plan_transit_trip",
+        "summary": "Plan bus journey",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Itinerary" }
+        }
+      }
+    },
+    "/api/v1/transit/fare": {
+      "get": {
+        "operationId": "get_fare",
+        "summary": "Calculate bus fare and Pink ticket",
+        "parameters": [
+          {
+            "name": "from_stop",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "to_stop",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "passenger_category",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "general" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Fare details" }
+        }
+      }
+    }
+  }
+}

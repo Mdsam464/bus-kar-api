@@ -1,0 +1,252 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bus Kar! Transit Assistant",
+    "description": "Real-time Delhi & Indian metro bus tracking, live ETAs, trip routing, fare calculator (with DTC Pink Pass free scheme for women), and crowdsourced colloquial station tags.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://bus-kar.onrender.com",
+      "description": "Production Cloud Server"
+    },
+    {
+      "url": "http://localhost:8000",
+      "description": "Local Development Server"
+    }
+  ],
+  "paths": {
+    "/api/v1/transit/stops/resolve": {
+      "get": {
+        "operationId": "resolveStop",
+        "summary": "Resolve colloquial stop name or landmark to canonical GTFS stop IDs",
+        "description": "Takes informal Indian transit queries (e.g. 'Purana Adda', 'Silk Board bridge neeche', 'AIIMS gate 2') and resolves them using crowdsourced community tags.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "Colloquial stop name, landmark, or street name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "description": "Transit city (default: delhi)",
+            "schema": {
+              "type": "string",
+              "default": "delhi"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Max candidates to return (1-10)",
+            "schema": {
+              "type": "integer",
+              "default": 3
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of matching stop candidates with confidence scores and upvoted community tags."
+          }
+        }
+      }
+    },
+    "/api/v1/transit/stops/{stop_id}/eta": {
+      "get": {
+        "operationId": "getLiveBusEta",
+        "summary": "Get real-time bus arrivals and live GPS telemetry at a stop",
+        "description": "Returns upcoming buses, countdown in minutes, distance in meters, crowd occupancy, and a 1-tap live map URL.",
+        "parameters": [
+          {
+            "name": "stop_id",
+            "in": "path",
+            "required": true,
+            "description": "Canonical GTFS stop ID (e.g. DTC_KG_01)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "delhi"
+            }
+          },
+          {
+            "name": "route_number",
+            "in": "query",
+            "required": false,
+            "description": "Optional filter for specific bus route (e.g. 534, TMS)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Real-time arrival array with live GPS telemetry."
+          }
+        }
+      }
+    },
+    "/api/v1/transit/trip/plan": {
+      "get": {
+        "operationId": "planTransitTrip",
+        "summary": "Plan point-to-point transit itinerary",
+        "description": "Calculates bus routes, transfers, estimated travel time, fare estimate, and first/last-mile ride suggestions.",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "required": true,
+            "description": "Starting stop name or colloquial landmark",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "required": true,
+            "description": "Destination stop name or colloquial landmark",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "delhi"
+            }
+          },
+          {
+            "name": "preference",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["fastest", "ac_only", "cheapest"],
+              "default": "fastest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Optimized transit journey legs."
+          }
+        }
+      }
+    },
+    "/api/v1/transit/fare": {
+      "get": {
+        "operationId": "getFareAndTicketing",
+        "summary": "Calculate bus fare and concession eligibility",
+        "description": "Calculates official DTC fare slabs, checks free travel under Delhi Pink Slip scheme for women, and provides digital QR booking links.",
+        "parameters": [
+          {
+            "name": "from_stop",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "to_stop",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "route_number",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "534" }
+          },
+          {
+            "name": "passenger_category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["general", "woman", "senior_citizen", "student"],
+              "default": "general"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fare breakdown in INR, concession rules, and digital booking URL."
+          }
+        }
+      }
+    },
+    "/api/v1/tags/suggest": {
+      "post": {
+        "operationId": "suggestColloquialTag",
+        "summary": "Register a new public colloquial nickname for a bus stop",
+        "description": "Enables crowdsourced station tagging. Instantly indexed and publicly searchable by all commuters.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["stop_id", "tag"],
+                "properties": {
+                  "stop_id": { "type": "string", "description": "Canonical GTFS stop ID" },
+                  "tag": { "type": "string", "description": "Colloquial nickname or landmark description" },
+                  "city": { "type": "string", "default": "delhi" },
+                  "language": { "type": "string", "default": "en" },
+                  "category": { "type": "string", "enum": ["landmark", "metro_gate", "slang", "junction"], "default": "landmark" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tag successfully created and published."
+          }
+        }
+      }
+    },
+    "/api/v1/tags/stops/{stop_id}": {
+      "get": {
+        "operationId": "listStopTags",
+        "summary": "List all active public colloquial tags for a stop",
+        "parameters": [
+          {
+            "name": "stop_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "delhi" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of active community nicknames ordered by upvotes."
+          }
+        }
+      }
+    }
+  }
+}
