@@ -13,7 +13,7 @@ from app.schemas.tags import (
 
 router = APIRouter(prefix="/api/v1/tags", tags=["Crowdsourced Colloquial Stop Tags"])
 
-@router.post("/suggest", response_model=StopTagResponse)
+@router.post("/suggest", response_model=StopTagResponse, operation_id="suggestColloquialTag")
 async def suggest_tag(
     req: SuggestTagRequest,
     db: AsyncSession = Depends(get_db)
@@ -34,7 +34,7 @@ async def suggest_tag(
     )
     return tag_obj
 
-@router.post("/{tag_id}/vote", response_model=StopTagResponse)
+@router.post("/{tag_id}/vote", response_model=StopTagResponse, operation_id="voteStopTag")
 async def vote_tag(
     tag_id: str,
     req: VoteTagRequest,
@@ -45,7 +45,7 @@ async def vote_tag(
         raise HTTPException(status_code=404, detail="Tag ID not found.")
     return tag_obj
 
-@router.get("/stops/{stop_id}", response_model=StopTagsListResponse)
+@router.get("/stops/{stop_id}", response_model=StopTagsListResponse, operation_id="listStopTags")
 async def list_tags_for_stop(
     stop_id: str,
     city: str = Query("delhi"),

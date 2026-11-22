@@ -30,5 +30,5 @@ Tone & Style:
 ### 3. Actions Configuration
 - Click **Create new action**.
 - **Authentication:** Set to `None`.
-- **Schema:** Paste the contents of [`actions_schema.json`](actions_schema.json).
-- If deployed on Render or a public URL, ensure the `servers[0].url` matches your public domain.
+- **Schema:** Import URL: `https://bus-kar-api.vercel.app/openapi.json` (or paste [`openapi.json`](openapi.json)).
+- **Privacy Policy:** `https://bus-kar-api.vercel.app/privacy`

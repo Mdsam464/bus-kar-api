@@ -123,7 +123,7 @@ async def ai_plugin_json():
         "name_for_human": "Bus Kar! 🚌",
         "name_for_model": "bus_kar",
         "description_for_human": "Real-time Indian city bus tracking, live GPS arrivals, colloquial stop nicknames (e.g. Purana Adda), and DTC Pink Pass free travel calculation.",
-        "description_for_model": "Agent-first transit navigation and live bus telemetry engine for Indian city buses (Delhi DTC/DIMTS, expanding to BMTC Bengaluru and BEST Mumbai). Always resolve colloquial stop nicknames using resolveStop. Check real-time arrivals using getStopEta. Plan multi-modal trips using planTrip. Calculate official DTC fares and apply the 100% free Pink Ticket scheme for female passengers.",
+        "description_for_model": "Agent-first transit navigation and live bus telemetry engine for Indian city buses (Delhi DTC/DIMTS, expanding to BMTC Bengaluru and BEST Mumbai). Always resolve colloquial stop nicknames using resolveStop. Check real-time arrivals using getLiveBusEta. Plan multi-modal trips using planTransitTrip. Calculate official DTC fares and apply the 100% free Pink Ticket scheme for female passengers using getFareAndTicketing.",
         "auth": {
             "type": "none"
         },
@@ -133,8 +133,85 @@ async def ai_plugin_json():
         },
         "logo_url": "https://bus-kar-api.vercel.app/static/icon.png",
         "contact_email": "support@antigravity.in",
-        "legal_info_url": "https://bus-kar-api.vercel.app/"
+        "legal_info_url": "https://bus-kar-api.vercel.app/privacy"
     }
+
+PRIVACY_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - Bus Kar! 🚌</title>
+  <link rel="icon" type="image/png" href="/static/favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+  <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur px-6 py-4">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/static/icon-128.png" alt="Bus Kar! Logo" class="w-8 h-8 rounded-lg" />
+        <span class="font-bold text-lg text-emerald-400">Bus Kar!</span>
+      </a>
+      <a href="/" class="text-sm text-slate-400 hover:text-white transition">← Back to Home</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-12 flex-1">
+    <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-xl">
+      <h1 class="text-3xl font-extrabold mb-2 text-white">Privacy Policy</h1>
+      <p class="text-sm text-slate-400 mb-8">Effective Date: November 22, 2026</p>
+
+      <div class="space-y-6 text-slate-300 text-sm leading-relaxed">
+        <section>
+          <h2 class="text-lg font-semibold text-white mb-2">1. Overview</h2>
+          <p>Bus Kar! ("we", "our", or "the service") is an agent-first open public transit API and Model Context Protocol (MCP) server providing real-time telemetry, trip routing, and colloquial stop resolution for Indian city buses. We respect your privacy and are committed to transparent data practices.</p>
+        </section>
+
+        <section>
+          <h2 class="text-lg font-semibold text-white mb-2">2. Information We Do NOT Collect</h2>
+          <p>Bus Kar! does <strong>not</strong> collect, require, sell, or store Personally Identifiable Information (PII) such as your full name, email address, physical home address, government ID, or financial payment details.</p>
+        </section>
+
+        <section>
+          <h2 class="text-lg font-semibold text-white mb-2">3. Transit Telemetry & Location Data</h2>
+          <p>When you query bus arrivals or plan journeys:
+            <ul class="list-disc pl-5 mt-2 space-y-1 text-slate-400">
+              <li>Transit queries (stop IDs, landmarks, route numbers) are processed in-memory to calculate distances, ETAs, and fare estimates.</li>
+              <li>GPS coordinates provided to locate nearby stops are processed ephemerally and are never logged, tracked, or associated with user identities.</li>
+            </ul>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-lg font-semibold text-white mb-2">4. Crowdsourced Colloquial Stop Nicknames</h2>
+          <p>Community stop tags submitted by users (e.g. colloquial landmark nicknames like "Purana Adda" or "AIIMS Gate 2") are stored publicly in our transit alias database to assist other commuters. Submissions do not record personal account data.</p>
+        </section>
+
+        <section>
+          <h2 class="text-lg font-semibold text-white mb-2">5. Third-Party AI Platforms & Data Sources</h2>
+          <p>Bus Kar! integrates with OpenAI ChatGPT, Anthropic Claude, and Google Gemini via Model Context Protocol (MCP) and OpenAPI Actions. Queries passed from these platforms are subject to their respective privacy terms. Open transit vehicle data is sourced from public transit authorities including Delhi Open Transit Data (OTD), DTC, and DIMTS.</p>
+        </section>
+
+        <section>
+          <h2 class="text-lg font-semibold text-white mb-2">6. Contact & Open Source</h2>
+          <p>For questions or privacy inquiries, contact the Bus Kar! project maintainers via email at <a href="mailto:support@antigravity.in" class="text-emerald-400 underline">support@antigravity.in</a> or visit our open-source repository at <a href="https://github.com/Mdsam464/bus-kar-api" class="text-emerald-400 underline" target="_blank">github.com/Mdsam464/bus-kar-api</a>.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-800/80 px-6 py-6 text-center text-xs text-slate-500">
+    Bus Kar! Transit Engine • Privacy Policy • <a href="/" class="text-slate-400 hover:text-white">Home</a>
+  </footer>
+</body>
+</html>
+"""
+
+@app.get("/privacy", response_class=HTMLResponse, include_in_schema=False)
+async def privacy_policy():
+    return HTMLResponse(content=PRIVACY_HTML)
 
 LANDING_HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -189,10 +266,6 @@ LANDING_HTML = """<!DOCTYPE html>
         Agent-first Model Context Protocol (MCP) server & REST API powering Delhi DTC/DIMTS live tracking, crowdsourced colloquial stop tags, and 100% free Pink Ticket concessions.
       </p>
     </div>
-      <p class="text-slate-400 text-lg leading-relaxed">
-        Agent-first Model Context Protocol (MCP) server & REST API powering Delhi DTC/DIMTS live tracking, crowdsourced colloquial stop tags, and 100% free Pink Ticket concessions.
-      </p>
-    </div>
 
     <!-- Features Grid -->
     <div class="grid md:grid-cols-3 gap-6 mb-12">
@@ -243,7 +316,7 @@ LANDING_HTML = """<!DOCTYPE html>
 
   <!-- Footer -->
   <footer class="border-t border-slate-800/80 px-6 py-6 text-center text-xs text-slate-500">
-    Bus Kar! Transit Engine • Open Source Transit Intelligence for Indian Cities • Deployed on Vercel
+    Bus Kar! Transit Engine • Open Source Transit Intelligence • <a href="/privacy" class="text-emerald-400 hover:underline">Privacy Policy</a> • <a href="/docs" class="text-slate-400 hover:text-white underline">API Docs</a>
   </footer>
 </body>
 </html>

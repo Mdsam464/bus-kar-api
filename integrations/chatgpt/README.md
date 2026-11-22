@@ -17,7 +17,7 @@ This guide explains how to configure and brand **Bus Kar!** as an official Custo
    - Click **Import from URL**.
    - Enter: `https://bus-kar-api.vercel.app/openapi.json` and click **Import**.
    - **Authentication:** Set to `None`.
-   - **Privacy Policy:** `https://bus-kar-api.vercel.app/`
+   - **Privacy Policy:** `https://bus-kar-api.vercel.app/privacy`
 5. Click **Create / Publish** (top right) $\rightarrow$ Choose **Public** or **Anyone with a link**.
 
 ---

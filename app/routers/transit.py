@@ -13,7 +13,7 @@ from app.schemas.transit import (
 
 router = APIRouter(prefix="/api/v1/transit", tags=["Transit Operations"])
 
-@router.get("/stops/resolve", response_model=ResolveStopResponse)
+@router.get("/stops/resolve", response_model=ResolveStopResponse, operation_id="resolveStop")
 async def resolve_stop(
     query: str = Query(..., description="Colloquial stop name, landmark, or street"),
     city: str = Query("delhi", description="Transit city"),
@@ -23,7 +23,7 @@ async def resolve_stop(
     candidates = await TagService.resolve_stop_by_query(db, city, query, limit)
     return ResolveStopResponse(query=query, city=city, candidates=candidates)
 
-@router.get("/stops/{stop_id}/eta", response_model=StopETAResponse)
+@router.get("/stops/{stop_id}/eta", response_model=StopETAResponse, operation_id="getLiveBusEta")
 async def get_stop_eta(
     stop_id: str,
     city: str = Query("delhi"),
@@ -32,7 +32,7 @@ async def get_stop_eta(
 ):
     return await ETAService.get_stop_eta(db, city, stop_id, route_number)
 
-@router.get("/trip/plan", response_model=TripPlanResponse)
+@router.get("/trip/plan", response_model=TripPlanResponse, operation_id="planTransitTrip")
 async def plan_trip(
     origin: str = Query(..., description="Origin stop or colloquial landmark"),
     destination: str = Query(..., description="Destination stop or colloquial landmark"),
@@ -42,7 +42,7 @@ async def plan_trip(
 ):
     return await ETAService.plan_trip(db, city, origin, destination, preference)
 
-@router.get("/fare", response_model=FareInfoResponse)
+@router.get("/fare", response_model=FareInfoResponse, operation_id="getFareAndTicketing")
 async def get_fare(
     from_stop: str = Query(...),
     to_stop: str = Query(...),
