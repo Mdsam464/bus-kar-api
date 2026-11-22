@@ -1,0 +1,1265 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bus Kar! \ud83d\ude8c",
+    "description": "Bus Kar! - Agent-First Transit API and Model Context Protocol (MCP) server for Indian City Bus Telemetry & Crowdsourced Colloquial Stops.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/transit/stops/resolve": {
+      "get": {
+        "tags": [
+          "Transit Operations"
+        ],
+        "summary": "Resolve Stop",
+        "operationId": "resolveStop",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Colloquial stop name, landmark, or street",
+              "title": "Query"
+            },
+            "description": "Colloquial stop name, landmark, or street"
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Transit city",
+              "default": "delhi",
+              "title": "City"
+            },
+            "description": "Transit city"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10,
+              "minimum": 1,
+              "default": 3,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResolveStopResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transit/stops/{stop_id}/eta": {
+      "get": {
+        "tags": [
+          "Transit Operations"
+        ],
+        "summary": "Get Stop Eta",
+        "operationId": "getLiveBusEta",
+        "parameters": [
+          {
+            "name": "stop_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Stop Id"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "delhi",
+              "title": "City"
+            }
+          },
+          {
+            "name": "route_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Route Number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StopETAResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transit/trip/plan": {
+      "get": {
+        "tags": [
+          "Transit Operations"
+        ],
+        "summary": "Plan Trip",
+        "operationId": "planTransitTrip",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Origin stop or colloquial landmark",
+              "title": "Origin"
+            },
+            "description": "Origin stop or colloquial landmark"
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Destination stop or colloquial landmark",
+              "title": "Destination"
+            },
+            "description": "Destination stop or colloquial landmark"
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "delhi",
+              "title": "City"
+            }
+          },
+          {
+            "name": "preference",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "fastest",
+                "ac_only",
+                "cheapest"
+              ],
+              "type": "string",
+              "default": "fastest",
+              "title": "Preference"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripPlanResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transit/fare": {
+      "get": {
+        "tags": [
+          "Transit Operations"
+        ],
+        "summary": "Get Fare",
+        "operationId": "getFareAndTicketing",
+        "parameters": [
+          {
+            "name": "from_stop",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "From Stop"
+            }
+          },
+          {
+            "name": "to_stop",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "To Stop"
+            }
+          },
+          {
+            "name": "route_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "534",
+              "title": "Route Number"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "delhi",
+              "title": "City"
+            }
+          },
+          {
+            "name": "passenger_category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "general",
+                "woman",
+                "senior_citizen",
+                "student"
+              ],
+              "type": "string",
+              "default": "general",
+              "title": "Passenger Category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FareInfoResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tags/suggest": {
+      "post": {
+        "tags": [
+          "Crowdsourced Colloquial Stop Tags"
+        ],
+        "summary": "Suggest Tag",
+        "operationId": "suggestColloquialTag",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuggestTagRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StopTagResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tags/{tag_id}/vote": {
+      "post": {
+        "tags": [
+          "Crowdsourced Colloquial Stop Tags"
+        ],
+        "summary": "Vote Tag",
+        "operationId": "voteStopTag",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tag Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteTagRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StopTagResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tags/stops/{stop_id}": {
+      "get": {
+        "tags": [
+          "Crowdsourced Colloquial Stop Tags"
+        ],
+        "summary": "List Tags For Stop",
+        "operationId": "listStopTags",
+        "parameters": [
+          {
+            "name": "stop_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Stop Id"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "delhi",
+              "title": "City"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StopTagsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/whatsapp/simulate": {
+      "post": {
+        "tags": [
+          "WhatsApp Bot Webhook & Simulator"
+        ],
+        "summary": "Simulate Whatsapp Chat",
+        "description": "Test and simulate WhatsApp interactions without needing a live Twilio account.",
+        "operationId": "simulate_whatsapp_chat_api_v1_whatsapp_simulate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WhatsAppSimulateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WhatsAppSimulateResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/whatsapp/webhook": {
+      "post": {
+        "tags": [
+          "WhatsApp Bot Webhook & Simulator"
+        ],
+        "summary": "Twilio Whatsapp Webhook",
+        "description": "Standard Twilio WhatsApp Webhook endpoint.\nPoint your Twilio Sandbox WhatsApp Incoming Webhook URL here!",
+        "operationId": "twilio_whatsapp_webhook_api_v1_whatsapp_webhook_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_twilio_whatsapp_webhook_api_v1_whatsapp_webhook_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Root",
+        "description": "Returns the public website HTML landing page by default.\nOnly returns JSON if requested explicitly via ?format=json or Accept: application/json without text/html.",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_twilio_whatsapp_webhook_api_v1_whatsapp_webhook_post": {
+        "properties": {
+          "From": {
+            "type": "string",
+            "title": "From"
+          },
+          "Body": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body"
+          },
+          "Latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "Longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          }
+        },
+        "type": "object",
+        "required": [
+          "From"
+        ],
+        "title": "Body_twilio_whatsapp_webhook_api_v1_whatsapp_webhook_post"
+      },
+      "BusArrival": {
+        "properties": {
+          "route_number": {
+            "type": "string",
+            "title": "Route Number"
+          },
+          "vehicle_id": {
+            "type": "string",
+            "title": "Vehicle Id"
+          },
+          "vehicle_type": {
+            "type": "string",
+            "title": "Vehicle Type"
+          },
+          "eta_minutes": {
+            "type": "integer",
+            "title": "Eta Minutes"
+          },
+          "distance_meters": {
+            "type": "integer",
+            "title": "Distance Meters"
+          },
+          "last_ping_seconds_ago": {
+            "type": "integer",
+            "title": "Last Ping Seconds Ago"
+          },
+          "occupancy_status": {
+            "type": "string",
+            "title": "Occupancy Status"
+          },
+          "live_map_url": {
+            "type": "string",
+            "title": "Live Map Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_number",
+          "vehicle_id",
+          "vehicle_type",
+          "eta_minutes",
+          "distance_meters",
+          "last_ping_seconds_ago",
+          "occupancy_status",
+          "live_map_url"
+        ],
+        "title": "BusArrival"
+      },
+      "ConcessionInfo": {
+        "properties": {
+          "scheme": {
+            "type": "string",
+            "title": "Scheme"
+          },
+          "eligible": {
+            "type": "boolean",
+            "title": "Eligible"
+          },
+          "final_fare": {
+            "type": "number",
+            "title": "Final Fare"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scheme",
+          "eligible",
+          "final_fare",
+          "note"
+        ],
+        "title": "ConcessionInfo"
+      },
+      "FareInfoResponse": {
+        "properties": {
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "route_number": {
+            "type": "string",
+            "title": "Route Number"
+          },
+          "from_stop": {
+            "type": "string",
+            "title": "From Stop"
+          },
+          "to_stop": {
+            "type": "string",
+            "title": "To Stop"
+          },
+          "fare_inr": {
+            "type": "number",
+            "title": "Fare Inr"
+          },
+          "bus_type": {
+            "type": "string",
+            "title": "Bus Type"
+          },
+          "concessions_applicable": {
+            "items": {
+              "$ref": "#/components/schemas/ConcessionInfo"
+            },
+            "type": "array",
+            "title": "Concessions Applicable"
+          },
+          "digital_ticketing": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Digital Ticketing"
+          }
+        },
+        "type": "object",
+        "required": [
+          "city",
+          "route_number",
+          "from_stop",
+          "to_stop",
+          "fare_inr",
+          "bus_type",
+          "concessions_applicable",
+          "digital_ticketing"
+        ],
+        "title": "FareInfoResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ResolveStopResponse": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/StopCandidate"
+            },
+            "type": "array",
+            "title": "Candidates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "city",
+          "candidates"
+        ],
+        "title": "ResolveStopResponse"
+      },
+      "StopCandidate": {
+        "properties": {
+          "stop_id": {
+            "type": "string",
+            "title": "Stop Id"
+          },
+          "official_name": {
+            "type": "string",
+            "title": "Official Name"
+          },
+          "matched_tag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Matched Tag"
+          },
+          "tag_upvotes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tag Upvotes",
+            "default": 0
+          },
+          "latitude": {
+            "type": "number",
+            "title": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stop_id",
+          "official_name",
+          "latitude",
+          "longitude",
+          "confidence",
+          "city"
+        ],
+        "title": "StopCandidate"
+      },
+      "StopETAResponse": {
+        "properties": {
+          "stop_id": {
+            "type": "string",
+            "title": "Stop Id"
+          },
+          "stop_name": {
+            "type": "string",
+            "title": "Stop Name"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          },
+          "arrivals": {
+            "items": {
+              "$ref": "#/components/schemas/BusArrival"
+            },
+            "type": "array",
+            "title": "Arrivals"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stop_id",
+          "stop_name",
+          "city",
+          "timestamp",
+          "arrivals"
+        ],
+        "title": "StopETAResponse"
+      },
+      "StopTagResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "stop_id": {
+            "type": "string",
+            "title": "Stop Id"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "tag": {
+            "type": "string",
+            "title": "Tag"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "upvotes": {
+            "type": "integer",
+            "title": "Upvotes"
+          },
+          "downvotes": {
+            "type": "integer",
+            "title": "Downvotes"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "stop_id",
+          "city",
+          "tag",
+          "language",
+          "category",
+          "upvotes",
+          "downvotes",
+          "status",
+          "created_at"
+        ],
+        "title": "StopTagResponse"
+      },
+      "StopTagsListResponse": {
+        "properties": {
+          "stop_id": {
+            "type": "string",
+            "title": "Stop Id"
+          },
+          "official_name": {
+            "type": "string",
+            "title": "Official Name"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/StopTagResponse"
+            },
+            "type": "array",
+            "title": "Tags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stop_id",
+          "official_name",
+          "city",
+          "tags"
+        ],
+        "title": "StopTagsListResponse"
+      },
+      "SuggestTagRequest": {
+        "properties": {
+          "city": {
+            "type": "string",
+            "title": "City",
+            "description": "Transit city name, e.g. delhi, bengaluru, mumbai",
+            "default": "delhi"
+          },
+          "stop_id": {
+            "type": "string",
+            "title": "Stop Id",
+            "description": "GTFS stop_id to associate tag with"
+          },
+          "tag": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 2,
+            "title": "Tag",
+            "description": "Colloquial tag or landmark alias"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language",
+            "description": "Language code: en, hi, kn, mr, etc.",
+            "default": "en"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category",
+            "description": "landmark, metro_gate, slang, junction",
+            "default": "landmark"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stop_id",
+          "tag"
+        ],
+        "title": "SuggestTagRequest"
+      },
+      "TripLeg": {
+        "properties": {
+          "route_number": {
+            "type": "string",
+            "title": "Route Number"
+          },
+          "from_stop": {
+            "type": "string",
+            "title": "From Stop"
+          },
+          "to_stop": {
+            "type": "string",
+            "title": "To Stop"
+          },
+          "stops_count": {
+            "type": "integer",
+            "title": "Stops Count"
+          },
+          "next_bus_eta_minutes": {
+            "type": "integer",
+            "title": "Next Bus Eta Minutes"
+          },
+          "bus_type": {
+            "type": "string",
+            "title": "Bus Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_number",
+          "from_stop",
+          "to_stop",
+          "stops_count",
+          "next_bus_eta_minutes",
+          "bus_type"
+        ],
+        "title": "TripLeg"
+      },
+      "TripOption": {
+        "properties": {
+          "option_id": {
+            "type": "integer",
+            "title": "Option Id"
+          },
+          "total_travel_time_minutes": {
+            "type": "integer",
+            "title": "Total Travel Time Minutes"
+          },
+          "fare_estimate": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Fare Estimate"
+          },
+          "transfers": {
+            "type": "integer",
+            "title": "Transfers"
+          },
+          "legs": {
+            "items": {
+              "$ref": "#/components/schemas/TripLeg"
+            },
+            "type": "array",
+            "title": "Legs"
+          },
+          "first_last_mile_tip": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Last Mile Tip"
+          }
+        },
+        "type": "object",
+        "required": [
+          "option_id",
+          "total_travel_time_minutes",
+          "fare_estimate",
+          "transfers",
+          "legs"
+        ],
+        "title": "TripOption"
+      },
+      "TripPlanResponse": {
+        "properties": {
+          "origin": {
+            "type": "string",
+            "title": "Origin"
+          },
+          "destination": {
+            "type": "string",
+            "title": "Destination"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "routes": {
+            "items": {
+              "$ref": "#/components/schemas/TripOption"
+            },
+            "type": "array",
+            "title": "Routes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "origin",
+          "destination",
+          "city",
+          "routes"
+        ],
+        "title": "TripPlanResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VoteTagRequest": {
+        "properties": {
+          "vote_type": {
+            "type": "string",
+            "pattern": "^(upvote|downvote)$",
+            "title": "Vote Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "vote_type"
+        ],
+        "title": "VoteTagRequest"
+      },
+      "WhatsAppSimulateRequest": {
+        "properties": {
+          "user_phone": {
+            "type": "string",
+            "title": "User Phone",
+            "default": "+919876543210"
+          },
+          "message_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message Text",
+            "default": "Nehru Place to Kashmere Gate"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          }
+        },
+        "type": "object",
+        "title": "WhatsAppSimulateRequest"
+      },
+      "WhatsAppSimulateResponse": {
+        "properties": {
+          "user_phone": {
+            "type": "string",
+            "title": "User Phone"
+          },
+          "incoming_query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incoming Query"
+          },
+          "bot_reply": {
+            "type": "string",
+            "title": "Bot Reply"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_phone",
+          "incoming_query",
+          "bot_reply"
+        ],
+        "title": "WhatsAppSimulateResponse"
+      }
+    }
+  }
+}

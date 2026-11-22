@@ -1,10 +1,19 @@
 # Bus Kar! ChatGPT Custom GPT Configuration
 
-Copy and paste these values when creating your Custom GPT in [chatgpt.com](https://chatgpt.com):
+Copy and paste these verified values when creating your Custom GPT in [chatgpt.com](https://chatgpt.com):
+
+---
 
 ### 1. Basic Details
 - **Name:** `Bus Kar! 🚌`
 - **Description:** `Real-time Delhi & metro bus tracker, live ETAs, fare calculator, and crowdsourced stop guide.`
+- **Publisher Name:** `Bus Kar! Team` (or `Touchstone Labs`)
+- **Website URL:** `https://bus-kar-api.vercel.app`
+- **Support URL:** `https://bus-kar-api.vercel.app/support` (or `mailto:support@antigravity.in`)
+- **Privacy Policy URL:** `https://bus-kar-api.vercel.app/privacy`
+- **Terms of Service URL:** `https://bus-kar-api.vercel.app/terms`
+
+---
 
 ### 2. Instructions (System Prompt)
 ```text
@@ -27,8 +36,27 @@ Tone & Style:
 - Use clean Markdown cards with clear emojis (🚌, ⏱️, 📍, 🎟️, 🗺️).
 ```
 
+---
+
 ### 3. Actions Configuration
 - Click **Create new action**.
 - **Authentication:** Set to `None`.
-- **Schema:** Import URL: `https://bus-kar-api.vercel.app/openapi.json` (or paste [`openapi.json`](openapi.json)).
+- **Schema:** Click **Import from URL** and enter:
+  ```text
+  https://bus-kar-api.vercel.app/openapi.json
+  ```
+- **Privacy Policy:**
+  ```text
+  https://bus-kar-api.vercel.app/privacy
+  ```
+
+---
+
+### 4. Publisher & Domain Verification Links
+- **Public Website:** `https://bus-kar-api.vercel.app`
+- **About & Publisher Proof:** `https://bus-kar-api.vercel.app/about`
+- **Support Desk:** `https://bus-kar-api.vercel.app/support`
 - **Privacy Policy:** `https://bus-kar-api.vercel.app/privacy`
+- **Terms of Service:** `https://bus-kar-api.vercel.app/terms`
+- **OpenAPI 3.1 Schema:** `https://bus-kar-api.vercel.app/openapi.json`
+- **Model Context Protocol (MCP SSE):** `https://bus-kar-api.vercel.app/mcp/sse`

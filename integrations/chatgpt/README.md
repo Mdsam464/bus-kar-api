@@ -1,6 +1,6 @@
 # ChatGPT Custom GPT Integration Guide for Bus Kar! 🚌
 
-This guide explains how to configure and brand **Bus Kar!** as an official Custom GPT.
+This guide explains how to configure, verify, and publish **Bus Kar!** as an official Custom GPT.
 
 ---
 
@@ -9,7 +9,7 @@ This guide explains how to configure and brand **Bus Kar!** as an official Custo
 1. Open **[chatgpt.com](https://chatgpt.com)** and log in.
 2. In the left sidebar, click **Explore GPTs** $\rightarrow$ Click **+ Create** (top right corner).
 3. Select the **Configure** tab:
-   - **Profile Picture / Icon:** Click the circle icon, choose **Upload Photo**, and select [`integrations/chatgpt/icon.png`](icon.png).
+   - **Profile Picture / Icon:** Click the circle icon, choose **Upload Photo**, and select [`icon.png`](icon.png).
    - **Name:** `Bus Kar! 🚌`
    - **Description:** `Real-time Indian city bus tracking, live GPS arrivals, crowdsourced colloquial stop tags, and DTC Pink Scheme fare calculation.`
    - **Instructions:** Paste the full contents of [`instructions.md`](instructions.md).
@@ -18,7 +18,14 @@ This guide explains how to configure and brand **Bus Kar!** as an official Custo
    - Enter: `https://bus-kar-api.vercel.app/openapi.json` and click **Import**.
    - **Authentication:** Set to `None`.
    - **Privacy Policy:** `https://bus-kar-api.vercel.app/privacy`
-5. Click **Create / Publish** (top right) $\rightarrow$ Choose **Public** or **Anyone with a link**.
+5. **Publisher Verification Details (If Prompted by ChatGPT):**
+   - **Public Website URL:** `https://bus-kar-api.vercel.app`
+   - **About / Publisher Proof:** `https://bus-kar-api.vercel.app/about`
+   - **Support URL:** `https://bus-kar-api.vercel.app/support`
+   - **Terms of Service:** `https://bus-kar-api.vercel.app/terms`
+   - **Privacy Policy:** `https://bus-kar-api.vercel.app/privacy`
+   - **Publisher Name:** `Bus Kar! Team` (or `Touchstone Labs`)
+6. Click **Create / Publish** (top right) $\rightarrow$ Choose **Public** or **Anyone with a link**.
 
 ---
 
