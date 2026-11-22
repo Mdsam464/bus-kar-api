@@ -1,21 +1,24 @@
-# ChatGPT Integration Guide for Bus Kar! 🚌
+# ChatGPT Custom GPT Integration Guide for Bus Kar! 🚌
 
-This guide explains how to connect **Bus Kar!** to ChatGPT as a Custom GPT Action.
+This guide explains how to configure and brand **Bus Kar!** as an official Custom GPT.
 
 ---
 
-## 🚀 Setup Steps (5 Minutes)
+## 🚀 Setup Steps (2 Minutes)
 
-1. Open **[chatgpt.com](https://chatgpt.com)** and ensure you are logged in.
+1. Open **[chatgpt.com](https://chatgpt.com)** and log in.
 2. In the left sidebar, click **Explore GPTs** $\rightarrow$ Click **+ Create** (top right corner).
 3. Select the **Configure** tab:
-   - Fill in **Name** and **Description** from [`instructions.md`](instructions.md).
-   - Paste the System Prompt into the **Instructions** box.
-4. Scroll to the bottom and click **Create new action**:
+   - **Profile Picture / Icon:** Click the circle icon, choose **Upload Photo**, and select [`integrations/chatgpt/icon.png`](icon.png).
+   - **Name:** `Bus Kar! 🚌`
+   - **Description:** `Real-time Indian city bus tracking, live GPS arrivals, crowdsourced colloquial stop tags, and DTC Pink Scheme fare calculation.`
+   - **Instructions:** Paste the full contents of [`instructions.md`](instructions.md).
+4. Scroll down to **Actions** $\rightarrow$ Click **Create new action**:
+   - Click **Import from URL**.
+   - Enter: `https://bus-kar-api.vercel.app/openapi.json` and click **Import**.
    - **Authentication:** Set to `None`.
-   - **Schema:** Paste the entire contents of [`actions_schema.json`](actions_schema.json).
-   - Update `servers[0].url` to your public backend URL (e.g., `https://bus-kar.onrender.com` or your ngrok tunnel).
-5. Click **Save / Publish** (choose *Only me* or *Anyone with a link*).
+   - **Privacy Policy:** `https://bus-kar-api.vercel.app/`
+5. Click **Create / Publish** (top right) $\rightarrow$ Choose **Public** or **Anyone with a link**.
 
 ---
 

@@ -1,5 +1,13 @@
-# Bus Kar! 🚌🇮🇳
-### *Agent-First Transit API & Model Context Protocol (MCP) Plugin for Indian City Buses*
+<div align="center">
+  <img src="static/icon.png" width="128" height="128" alt="Bus Kar! Logo" style="border-radius: 24px;" />
+  <h1>Bus Kar! 🚌🇮🇳</h1>
+  <p><strong>Agent-First Transit API & Model Context Protocol (MCP) Plugin for Indian City Buses</strong></p>
+  <p>
+    <a href="https://bus-kar-api.vercel.app"><img src="https://img.shields.io/badge/Vercel-Live_Deployment-black?style=flat&logo=vercel" alt="Vercel" /></a>
+    <a href="https://bus-kar-api.vercel.app/docs"><img src="https://img.shields.io/badge/Swagger-API_Docs-emerald?style=flat&logo=fastapi" alt="API Docs" /></a>
+    <a href="https://github.com/Mdsam464/bus-kar-api"><img src="https://img.shields.io/badge/GitHub-Repository-blue?style=flat&logo=github" alt="GitHub" /></a>
+  </p>
+</div>
 
 **Bus Kar!** connects real-time Indian city bus telemetry (GTFS / GTFS-RT) with AI Agents (ChatGPT, Claude, Gemini, WhatsApp bots, and voice assistants).
 

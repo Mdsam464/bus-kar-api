@@ -96,8 +96,25 @@ app.include_router(whatsapp_router)
 # Mount MCP Server over SSE for OpenAI and remote AI agent integrations
 app.mount("/mcp", mcp.sse_app())
 
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi import Request
+import os
+
+STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
+if os.path.exists(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon_ico():
+    ico_path = os.path.join(STATIC_DIR, "favicon.ico")
+    if os.path.exists(ico_path):
+        return FileResponse(ico_path, media_type="image/x-icon")
+    return FileResponse(os.path.join(STATIC_DIR, "favicon.png"), media_type="image/png")
+
+@app.get("/favicon.png", include_in_schema=False)
+async def favicon_png():
+    return FileResponse(os.path.join(STATIC_DIR, "favicon.png"), media_type="image/png")
 
 LANDING_HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -105,6 +122,13 @@ LANDING_HTML = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bus Kar! 🚌 - Transit AI Agent API & MCP Engine</title>
+  <link rel="icon" type="image/png" href="/static/favicon.png">
+  <link rel="apple-touch-icon" href="/static/icon-128.png">
+  <meta property="og:title" content="Bus Kar! 🚌 - Indian City Transit AI Agent API & MCP">
+  <meta property="og:description" content="Real-time Indian city bus telemetry, live GPS ETAs, and crowdsourced colloquial transit navigation.">
+  <meta property="og:image" content="https://bus-kar-api.vercel.app/static/icon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://bus-kar-api.vercel.app/static/icon.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
@@ -114,7 +138,7 @@ LANDING_HTML = """<!DOCTYPE html>
   <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur px-6 py-4">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <span class="text-3xl">🚌</span>
+        <img src="/static/icon-128.png" alt="Bus Kar! Logo" class="w-10 h-10 rounded-xl shadow-lg border border-slate-700/60 object-cover" />
         <div>
           <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Bus Kar!</h1>
           <p class="text-xs text-slate-400">Indian City Transit Telemetry & Agent MCP</p>
@@ -134,10 +158,17 @@ LANDING_HTML = """<!DOCTYPE html>
 
   <!-- Hero -->
   <main class="max-w-6xl mx-auto px-6 py-12 flex-1 flex flex-col justify-center">
-    <div class="text-center max-w-3xl mx-auto mb-12">
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="flex justify-center mb-6">
+        <img src="/static/icon.png" alt="Bus Kar! 3D Logo" class="w-24 h-24 md:w-32 md:h-32 rounded-3xl shadow-2xl shadow-blue-500/25 border border-slate-700/60 object-cover hover:scale-105 transition duration-300" />
+      </div>
       <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
         Real-Time Indian Bus Telemetry for <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">AI Agents & Humans</span>
       </h2>
+      <p class="text-slate-400 text-lg leading-relaxed">
+        Agent-first Model Context Protocol (MCP) server & REST API powering Delhi DTC/DIMTS live tracking, crowdsourced colloquial stop tags, and 100% free Pink Ticket concessions.
+      </p>
+    </div>
       <p class="text-slate-400 text-lg leading-relaxed">
         Agent-first Model Context Protocol (MCP) server & REST API powering Delhi DTC/DIMTS live tracking, crowdsourced colloquial stop tags, and 100% free Pink Ticket concessions.
       </p>
